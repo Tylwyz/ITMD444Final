@@ -1,14 +1,20 @@
 import Search from './components/search/search';
+import Home from './pages/home';
+import Login from './pages/login';
 import CurrentWeather from './components/current-weather/current-weather';
 import { WEATHER_API_URL, WEATHER_API_KEY } from './api';
-import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
+import './App.css';
 
 
 function App() {
 
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
+
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [email, setEmail] = useState('')
 
   const handleOnSearchChange = (searchData) => {
     const [lat, lon] = searchData.value.split(" ");
@@ -39,8 +45,12 @@ function App() {
 
   return (
     <div className="container">
-     <Search onSearchChange={handleOnSearchChange} />
-     {currentWeather && <CurrentWeather data={currentWeather} />}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home email={email} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />} />
+          <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
